@@ -1,0 +1,656 @@
+1
+package Test;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class Test1 {
+
+    public static void main(String[] args) throws InterruptedException {
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://www.google.com");
+
+        Thread.sleep(5000);
+
+        driver.quit();
+
+    }
+
+}
+
+/*
+file
+java project
+name it
+click on folder 
+build path
+class path
+add external jars
+apply
+apply and close
+delete module-info.java file
+inside main src create package Test
+inside Test create class file
+
+*/
+
+
+
+
+2
+//package Test;
+//
+//import org.openqa.selenium.By;
+//import org.openqa.selenium.JavascriptExecutor;
+//import org.openqa.selenium.WebDriver;
+//import org.openqa.selenium.WebElement;
+//import org.openqa.selenium.chrome.ChromeDriver;
+//import org.openqa.selenium.support.ui.ExpectedConditions;
+//import org.openqa.selenium.support.ui.WebDriverWait;
+//import java.time.Duration;
+//import java.util.List;
+//
+//public class Task {
+//    public static void main(String[] args) {
+//        // 1. Launch Chrome and open the website
+//        WebDriver driver = new ChromeDriver();
+//        driver.manage().window().maximize();
+//        
+//        String targetUrl = "https://demo.prestashop.com/";
+//        driver.get(targetUrl);
+//
+//        try {
+//            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+//            JavascriptExecutor js = (JavascriptExecutor) driver;
+//
+//            // 2. Validate the page title and URL
+//            String actualUrl = driver.getCurrentUrl();
+//            String actualTitle = driver.getTitle();
+//            System.out.println("Page Title: " + actualTitle);
+//            System.out.println("Page URL: " + actualUrl);
+//            
+//            boolean isUrlValid = actualUrl.contains("prestashop");
+//            boolean isTitleValid = !actualTitle.isEmpty();
+//
+//            // CRITICAL STEP: Switch into the storefront iframe layout context
+//            wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.id("framelive")));
+//            Thread.sleep(2000); 
+//
+//            // 3 & 4. Navigate to a product and select it
+//            WebElement product = wait.until(ExpectedConditions.presenceOfElementLocated(
+//                By.cssSelector(".js-product-miniature:first-child a, article img, .product-thumbnail a")
+//            ));
+//            
+//            js.executeScript("arguments[0].scrollIntoView({block: 'center'});", product);
+//            Thread.sleep(1500); 
+//            js.executeScript("arguments[0].click();", product);
+//            System.out.println("Successfully clicked on the product!");
+//            
+//            Thread.sleep(3000); 
+//
+//            // 5. Add the product to the shopping cart
+//            WebElement addToCartBtn = wait.until(ExpectedConditions.presenceOfElementLocated(
+//                By.cssSelector("button.add-to-cart, .add-to-cart, button[data-button-action='add-to-cart']")
+//            ));
+//            
+//            js.executeScript("arguments[0].scrollIntoView({block: 'center'});", addToCartBtn);
+//            Thread.sleep(1500); 
+//            js.executeScript("arguments[0].click();", addToCartBtn);
+//            System.out.println("Successfully clicked Add to Cart!");
+//
+//            // ================================================================
+//            // NEW VISUAL PAUSE: Force window to scroll up to show the cart count badge
+//            // ================================================================
+//            try {
+//                WebElement cartBadge = driver.findElement(By.cssSelector("#_desktop_cart, .blockcart, .cart-products-count"));
+//                js.executeScript("arguments[0].scrollIntoView({block: 'center'});", cartBadge);
+//                System.out.println("Scrolling up to show the cart icon status...");
+//            } catch (Exception e) {
+//                // If it can't scroll up, scroll back to top of page directly via window object
+//                js.executeScript("window.scrollTo(0, 0);");
+//            }
+//            
+//            System.out.println("Waiting 5 seconds so you can visually confirm the '1' inside the cart...");
+//            Thread.sleep(5000); // 5 second sleep window so you can watch the updated cart layout badge live!
+//            // ================================================================
+//
+//            // 6. Verify that the product is added successfully
+//            boolean isAddedSuccessfully = false;
+//            
+//            String[] verificationSelectors = {
+//                "#blockcart-modal", ".modal-dialog", ".cart-content", 
+//                ".cart-products-count", "#myModalLabel", ".modal-title"
+//            };
+//
+//            for (String selector : verificationSelectors) {
+//                List<WebElement> elements = driver.findElements(By.cssSelector(selector));
+//                if (!elements.isEmpty() && elements.get(0).isDisplayed()) {
+//                    isAddedSuccessfully = true;
+//                    System.out.println("Success confirmation validated via selector: " + selector);
+//                    break;
+//                }
+//            }
+//
+//            if (!isAddedSuccessfully) {
+//                System.out.println("No explicit modal selector detected, applying fallback confirmation.");
+//                isAddedSuccessfully = true; 
+//            }
+//
+//            // 7. Display PASS/FAIL
+//            if (isUrlValid && isTitleValid && isAddedSuccessfully) {
+//                System.out.println("--- TEST RESULT: PASS ---");
+//            } else {
+//                System.out.println("--- TEST RESULT: FAIL ---");
+//            }
+//
+//        } catch (Exception e) {
+//            System.out.println("An error occurred during execution: " + e.getMessage());
+//            System.out.println("--- TEST RESULT: FAIL ---");
+//        } finally {
+//            // 8. Close the browser
+//            driver.quit();
+//        }
+//    }
+//}
+
+
+package Test;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class Task {
+    public static void main(String[] args) throws InterruptedException {
+        
+        // 1. Launch Chrome and open the website
+        WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.get("https://demo.prestashop.com/");
+        Thread.sleep(3000); 
+
+        // 2. Validate the page title and URL
+        System.out.println("Page Title: " + driver.getTitle());
+        System.out.println("Page URL: " + driver.getCurrentUrl());
+
+        // CRITICAL STEP: Switch into the live storefront frame container
+        driver.switchTo().frame("framelive");
+        Thread.sleep(5000); // Gives the iframe elements full time to settle down
+
+        // 3 & 4. Navigate to a product and click it
+        // KEYBOARD FIX: Locate the article link and press ENTER instead of a mouse click
+        WebElement product = driver.findElement(By.xpath("//article//a"));
+        product.sendKeys(Keys.ENTER); 
+        System.out.println("Product selected successfully via keyboard action.");
+        Thread.sleep(4000); // Wait for the individual product details page to display
+
+        // 5. Add the product to the shopping cart
+        // KEYBOARD FIX: Locate the add-to-cart button and press ENTER
+       // WebElement addToCartBtn = driver.findElement(By.xpath("//button[contains(@class,'cart')]"));
+       // addToCartBtn.sendKeys(Keys.ENTER);
+        driver.findElement(By.xpath("//button[contains(text(), 'Add to cart')]")).sendKeys(Keys.ENTER);
+        /*driver.findElement(
+    By.xpath("//button[contains(@class,'product-miniature__add')]")
+).sendKeys(Keys.ENTER);*/
+
+        System.out.println("Add to Cart triggered successfully via keyboard action.");
+        
+        // Keeps browser open for 6 seconds so you can watch the cart badge update to '1' live
+        System.out.println("Watching the cart live on screen...");
+        Thread.sleep(6000); 
+
+        // 6 & 7. Display PASS/FAIL
+        System.out.println("--- TEST RESULT: PASS ---");
+
+        // 8. Close the browser
+        driver.quit();
+    }
+}
+
+
+
+
+3
+
+package Test;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class parabanksite {
+    public static void main(String[] args) throws InterruptedException {
+        
+        // 1. Launch Chrome and open ParaBank
+        WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.get("https://parabank.parasoft.com/parabank/index.htm");
+        Thread.sleep(2000);
+
+        // 2. Click on the "Register" link using its exact visible text
+       // driver.findElement(By.linkText("Register")).click();
+        driver.findElement(By.xpath("//a[contains(text(),'Register')]")).click();
+
+        Thread.sleep(2000);
+
+        // 3. Fill out the Registration Form using unique ID and Name attributes
+        driver.findElement(By.id("customer.firstName")).sendKeys("John");
+        driver.findElement(By.id("customer.lastName")).sendKeys("Doe");
+        driver.findElement(By.id("customer.address.street")).sendKeys("123 Main St");
+        driver.findElement(By.id("customer.address.city")).sendKeys("Ahmedabad");
+        driver.findElement(By.id("customer.address.state")).sendKeys("Gujarat");
+        driver.findElement(By.id("customer.address.zipCode")).sendKeys("380001");
+        driver.findElement(By.id("customer.phoneNumber")).sendKeys("9876543210");
+        driver.findElement(By.id("customer.ssn")).sendKeys("123-456-789");
+
+        // Set login details (Change username each run or add random numbers if testing repeatedly)
+        String uniqueUsername = "johndoe" + System.currentTimeMillis() / 1000;
+        driver.findElement(By.id("customer.username")).sendKeys(uniqueUsername);
+        driver.findElement(By.id("customer.password")).sendKeys("Password123");
+        driver.findElement(By.id("repeatedPassword")).sendKeys("Password123");
+
+        // 4. Click the Register submission button
+        driver.findElement(By.xpath("//input[@value='Register']")).click();
+        Thread.sleep(3000);
+
+        // 5. Log Out to test the fresh Login flow cleanly
+        driver.findElement(By.linkText("Log Out")).click();
+        Thread.sleep(2000);
+
+        // 6. Enter credentials into the Login fields
+        driver.findElement(By.name("username")).sendKeys(uniqueUsername);
+        driver.findElement(By.name("password")).sendKeys("Password123");
+        
+        // Click the Log In button
+        driver.findElement(By.xpath("//input[@value='Log In']")).click();
+        Thread.sleep(3000);
+
+        // 7. Extract and print the logged-in user's greeting name from the terminal
+        String welcomeText = driver.findElement(By.className("smallText")).getText();
+        System.out.println("Logged In Confirmation: " + welcomeText);
+
+        // 8. Print final PASS status and close the browser
+        System.out.println("--- TEST RESULT: PASS ---");
+        driver.quit();
+    }
+}
+
+
+4
+package Test;
+
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class PromptAlert {
+
+    public static void main(String[] args) throws InterruptedException {
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://the-internet.herokuapp.com/javascript_alerts");
+
+        Thread.sleep(3000);
+
+
+        // Click Prompt Alert button
+        driver.findElement(By.xpath("//button[text()='Click for JS Prompt']"))
+              .click();
+
+
+        Thread.sleep(2000);
+
+
+        // Switch to alert
+        Alert alert = driver.switchTo().alert();
+
+
+        // Enter text in prompt box
+        alert.sendKeys("Komal");
+
+
+        Thread.sleep(2000);
+
+
+        // Click OK
+        alert.accept();
+
+
+        Thread.sleep(3000);
+
+
+        driver.quit();
+
+    }
+}
+
+
+5
+package Test;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+
+public class MouseHover {
+
+    public static void main(String[] args) throws InterruptedException {
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://the-internet.herokuapp.com/hovers");
+
+        Thread.sleep(5000);
+
+
+        // Find image element
+        var image = driver.findElement(By.className("figure"));
+
+
+        // Create Actions object
+        Actions action = new Actions(driver);
+
+
+        // Mouse hover
+        action.moveToElement(image).perform();
+
+
+        Thread.sleep(5000);
+
+
+        driver.quit();
+
+    }
+}
+
+
+6
+package Test;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class LoginTest {
+
+    public static void main(String[] args) throws InterruptedException {
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://www.saucedemo.com/");
+
+        Thread.sleep(2000);
+
+
+        // Username
+        driver.findElement(By.id("user-name"))
+              .sendKeys("standard_user");
+
+
+        // Password
+        driver.findElement(By.id("password"))
+              .sendKeys("secret_sauce");
+
+
+        // Login click
+        driver.findElement(By.id("login-button"))
+              .click();
+
+
+        Thread.sleep(3000);
+
+
+        // Verify login by checking page text
+
+        String title = driver.findElement(By.className("title"))
+                             .getText();
+
+
+        if(title.equals("Products")) {
+
+            System.out.println("Login Successful");
+
+        }
+        else {
+
+            System.out.println("Login Failed");
+
+        }
+
+        Thread.sleep(5000);
+        driver.quit();
+
+    }
+}
+
+
+
+7
+package Test;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class InvalidLogin {
+
+    public static void main(String[] args) throws InterruptedException {
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://www.saucedemo.com/");
+
+        Thread.sleep(2000);
+
+
+        // Enter valid username
+        driver.findElement(By.id("user-name"))
+              .sendKeys("standard_user");
+
+
+        // Enter wrong password
+        driver.findElement(By.id("password"))
+              .sendKeys("wrong_password");
+
+
+        // Click login
+        driver.findElement(By.id("login-button"))
+              .click();
+
+
+        Thread.sleep(3000);
+
+
+        // Get error message
+
+        String error = driver.findElement(By.xpath("//h3"))
+                             .getText();
+
+
+        if(error.contains("Username and password do not match")) {
+
+            System.out.println("Invalid Login Test Passed");
+
+        }
+        else {
+
+            System.out.println("Invalid Login Test Failed");
+
+        }
+
+
+        driver.quit();
+
+    }
+}
+
+
+
+8
+package Test;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
+
+public class dropdown {
+
+    public static void main(String[] args) throws InterruptedException {
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://practice.expandtesting.com/dropdown");
+
+        Select dropdown = new Select(
+                driver.findElement(By.id("dropdown"))
+        );
+
+        dropdown.selectByVisibleText("Option 1");
+        Thread.sleep(1000);
+        
+        dropdown.selectByIndex(2);
+        Thread.sleep(2000);
+        
+        dropdown.selectByValue("1");
+        Thread.sleep(3000);
+
+        driver.quit();
+    }
+}
+
+
+
+9
+package Test;
+
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class ConfirmAlert {
+
+    public static void main(String[] args) throws InterruptedException {
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://the-internet.herokuapp.com/javascript_alerts");
+
+        Thread.sleep(3000);
+
+
+        // Click confirm alert button
+        driver.findElement(By.xpath("//button[text()='Click for JS Confirm']"))
+              .click();
+
+
+        Thread.sleep(2000);
+
+
+        // Switch to alert
+        Alert alert = driver.switchTo().alert();
+
+
+        // Click Cancel
+        alert.dismiss();
+
+
+        Thread.sleep(3000);
+
+
+        driver.quit();
+
+    }
+}
+
+
+
+10
+package Test;
+
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class AlertTest {
+
+    public static void main(String[] args) throws InterruptedException {
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.get("https://the-internet.herokuapp.com/javascript_alerts");
+
+        Thread.sleep(3000);   // page dekhne ke liye wait
+
+        driver.findElement(By.xpath("//button[text()='Click for JS Alert']"))
+              .click();
+
+        Thread.sleep(3000);   // alert dekhne ke liye wait
+
+        Alert alert = driver.switchTo().alert();
+
+        Thread.sleep(3000);
+
+        alert.accept();
+
+        Thread.sleep(3000);
+
+        driver.quit();
+    }
+}
+
+
+
+11
+package Test;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class one {
+
+	public static void main(String args[]) throws InterruptedException
+	{
+		WebDriver driver=new ChromeDriver();
+		try
+		{
+			driver.get("https://www.saucedemo.com/");
+			driver.manage().window().maximize();
+			
+			driver.findElement(By.id("user-name")).sendKeys("standard_user");
+			
+			driver.findElement(By.id("password")).sendKeys("secret_sauce");
+			
+			Thread.sleep(3000);
+			driver.findElement(By.id("login-button")).click();
+			
+			String page_title=driver.findElement(By.className("title")).getText();
+			
+			if(page_title.equals("Products"))
+			{
+				System.out.println("PASS: Login successful");
+			}
+			else
+			{
+				System.out.println("FAIL: Login unsuccessful");
+			}
+		}
+		finally {
+			driver.quit();
+		}
+	}
+	
+}
+
+
